@@ -28,10 +28,76 @@ class Project(models.Model):
         blank=True
     )
 
-    deadline = models.DateTimeField(
+    deadline = models.DateField(
         blank=True,
         null=True,
     )
 
     def __str__(self):
         return self.project_name
+
+
+class Staff(models.Model):
+    firstname = models.CharField(
+        max_length=25
+    )
+
+    lastname = models.CharField(
+        max_length=60
+    )
+
+    def __str__(self):
+        return self.firstname
+
+class Content(models.Model):
+    name = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+    url = models.URLField(
+        max_length=255,
+    )
+    outlet = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+    author = models.CharField(
+        max_length=75,
+    )
+    date = models.DateField(
+        blank=True,
+    )
+    staff = models.ForeignKey(Staff)
+
+    project = models.ForeignKey(
+        Project,
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Metric(models.Model):
+    name = models.CharField(
+        max_length=50,
+    )
+    description = models.TextField(
+        max_length=250,
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Note(models.Model):
+
+    staff = models.ForeignKey(Staff)
+
+    comment = models.TextField()
+
+    content = models.ForeignKey(Content)
+
+    def __str__(self):
+        return self.comment
