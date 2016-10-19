@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.contrib.auth.models import User
 from django.db import models
 
 class Client(models.Model):
@@ -37,17 +38,28 @@ class Project(models.Model):
         return self.project_name
 
 
-class Staff(models.Model):
-    firstname = models.CharField(
-        max_length=25
+class Metric(models.Model):
+    name = models.CharField(
+        max_length=50,
     )
-
-    lastname = models.CharField(
-        max_length=60
+    description = models.TextField(
+        max_length=250,
     )
 
     def __str__(self):
-        return self.firstname
+        return self.name
+
+# class Staff(models.Model):
+#     firstname = models.CharField(
+#         max_length=25
+#     )
+#
+#     lastname = models.CharField(
+#         max_length=60
+#     )
+#
+#     def __str__(self):
+#         return self.firstname
 
 class Content(models.Model):
     name = models.CharField(
@@ -67,8 +79,14 @@ class Content(models.Model):
     date = models.DateField(
         blank=True,
     )
-    staff = models.ForeignKey(Staff)
-
+    user = models.ForeignKey(
+        User,
+        null=True
+    )
+    metric = models.ManyToManyField(
+        Metric,
+        null=True
+    )
     project = models.ForeignKey(
         Project,
         blank=True,
@@ -79,21 +97,12 @@ class Content(models.Model):
         return self.name
 
 
-class Metric(models.Model):
-    name = models.CharField(
-        max_length=50,
-    )
-    description = models.TextField(
-        max_length=250,
-    )
-
-    def __str__(self):
-        return self.name
-
-
 class Note(models.Model):
 
-    staff = models.ForeignKey(Staff)
+    user = models.ForeignKey(
+        User,
+        null=True
+    )
 
     comment = models.TextField()
 
